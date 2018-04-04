@@ -1,0 +1,224 @@
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "memo",
+            "intents": [
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": [
+                        "cancel",
+                        "stop",
+                        "don't do that",
+                        "scratch that",
+                        "nevermind"
+                    ]
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AddMessageIntent",
+                    "slots": [
+                        {
+                            "name": "MessageTo",
+                            "type": "AMAZON.Person"
+                        },
+                        {
+                            "name": "content",
+                            "type": "AMAZON.SearchQuery"
+                        }
+                    ],
+                    "samples": [
+                        "leave a note for {MessageTo}",
+                        "leave a note",
+                        "leave a message",
+                        "Leave a message for {MessageTo}"
+                    ]
+                },
+                {
+                    "name": "GetAllMessagesIntent",
+                    "slots": [
+                        {
+                            "name": "MessageTo",
+                            "type": "AMAZON.Person"
+                        }
+                    ],
+                    "samples": [
+                        "get all my messages",
+                        "get my messages",
+                        "get all messages",
+                        "get all messages for {MessageTo}",
+                        "what are the messages for {MessageTo}",
+                        "Tell me my messages",
+                        "Read me my messages"
+                    ]
+                },
+                {
+                    "name": "DeleteMessageIntent",
+                    "slots": [
+                        {
+                            "name": "MessageTo",
+                            "type": "AMAZON.Person"
+                        }
+                    ],
+                    "samples": [
+                        "Delete reminders for {MessageTo}",
+                        "Delete my reminders",
+                        "Delete all my messages",
+                        "Delete all my messages {MessageTo}",
+                        "Delete all messages for {MessageTo}",
+                        "Delete messages for {MessageTo}",
+                        "Delete my messages"
+                    ]
+                }
+            ],
+            "types": []
+        },
+        "dialog": {
+            "intents": [
+                {
+                    "name": "AddMessageIntent",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "MessageTo",
+                            "type": "AMAZON.Person",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.773094854977.242728677414"
+                            }
+                        },
+                        {
+                            "name": "content",
+                            "type": "AMAZON.SearchQuery",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.773094854977.672776904773"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "GetAllMessagesIntent",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "MessageTo",
+                            "type": "AMAZON.Person",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.384911385688.1036282032293"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "DeleteMessageIntent",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "MessageTo",
+                            "type": "AMAZON.Person",
+                            "confirmationRequired": true,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "confirmation": "Confirm.Slot.103435842052.937395576396",
+                                "elicitation": "Elicit.Slot.103435842052.937395576396"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "prompts": [
+            {
+                "id": "Elicit.Slot.773094854977.242728677414",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Who would you like to leave a message for?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "Who is this note for?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "Who is this message for?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.773094854977.672776904773",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "What message would you like to leave?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "What would you like to say?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.384911385688.1036282032293",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Who would you like to hear messages for?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "What is your name?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.103435842052.937395576396",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Who are you?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "What is your name?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "Whose messages would you like to delete?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "Who would you like to delete all messages for?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Slot.103435842052.937395576396",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "You want to delete all messages for {MessageTo} , correct?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "You are deleting all messages for {MessageTo} , is that correct?"
+                    }
+                ]
+            }
+        ]
+    }
+}
