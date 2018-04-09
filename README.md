@@ -10,4 +10,5 @@ Just say, _"Alexa, tell Memo to remind Mary"_ and leave a reminder for her.  Or,
 There are three features in this skill: leave a message, listen to all messages, and delete all messages.
 
 [Privacy Policy](https://mikeliddle.github.io/Memo/PrivacyPolicy)
+
 [Terms Of Use](https://mikeliddle.github.io/Memo/TermsOfUse)
