@@ -1,4 +1,3 @@
-# [Memo](https://mikeliddle.github.io/Memo/)
 An Alexa skill for leaving messages for other individuals in a household
 
 Have you ever needed to remind your child to take out the trash when they get home?  Or to clean their room?  Or remind your roommate your concert is tonight?
