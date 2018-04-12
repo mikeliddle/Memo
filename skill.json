@@ -15,11 +15,21 @@
                 },
                 {
                     "name": "AMAZON.HelpIntent",
-                    "samples": []
+                    "samples": [
+                        "help",
+                        "what is this",
+                        "what does this do"
+                    ]
                 },
                 {
                     "name": "AMAZON.StopIntent",
-                    "samples": []
+                    "samples": [
+                        "cancel",
+                        "stop",
+                        "don't do that",
+                        "scratch that",
+                        "nevermind"
+                    ]
                 },
                 {
                     "name": "AddMessageIntent",
