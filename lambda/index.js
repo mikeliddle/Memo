@@ -18,7 +18,7 @@ const alexaSDK = require('alexa-sdk');
 const awsSDK = require('aws-sdk');
 const promisify = require('es6-promisify');
 
-const APP_ID = 'amzn1.ask.skill.eaf7d3a0-861d-46f8-9d7c-4425f8296728';
+const APP_ID = 'amzn1.ask.skill.eaf7d3a0-861d-46f8-9d7c-9869f675e456';
 const MessagesTable = 'Messages';
 const docClient = new awsSDK.DynamoDB.DocumentClient();
 
