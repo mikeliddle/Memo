@@ -58,3 +58,4 @@ typings/
 .env
 
 *.zip
+lambda/info.cfg
