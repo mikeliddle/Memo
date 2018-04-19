@@ -22,7 +22,7 @@ const APP_ID = '';
 const MessagesTable = '';
 const docClient = new awsSDK.DynamoDB.DocumentClient();
 
-const EXPIRE_PERIOD = 14;
+const EXPIRE_PERIOD = 1209600000;
 
 // convert callback style functions to promises
 const dbScan = promisify(docClient.scan, docClient);
@@ -104,7 +104,8 @@ const handlers = {
     const content = slots.content.value;
     
     var expireTime = new Date();
-    expireTime.setDate(expireTime.getDate() + EXPIRE_PERIOD);
+    expireTime.setTime(expireTime.getTime() + EXPIRE_PERIOD);
+
 
     const dynamoParams = {
       TableName: MessagesTable,
@@ -112,7 +113,7 @@ const handlers = {
         UserId: userId,
         MessageTo: messageTo,
         Content: content,
-        expires: expireTime.getTime()
+        expires: Math.floor(expireTime.getTime() / 1000)
       }
     };
 
