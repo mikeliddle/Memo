@@ -29,6 +29,7 @@ const dbScan = promisify(docClient.scan, docClient);
 const dbGet = promisify(docClient.get, docClient);
 const dbPut = promisify(docClient.put, docClient);
 const dbDelete = promisify(docClient.delete, docClient);
+const dbBatchWrite = promisify(docClient.batchWrite, docClient);
 
 const instructions = `Welcome to Memo<break strength="medium" />
                       The following commands are available: leave a message, check my messages,
@@ -102,7 +103,7 @@ const handlers = {
 
     const messageTo = slots.MessageTo.value;
     const content = slots.content.value;
-    
+
     var expireTime = new Date();
     expireTime.setTime(expireTime.getTime() + EXPIRE_PERIOD);
 
@@ -113,14 +114,15 @@ const handlers = {
         UserId: userId,
         MessageTo: messageTo,
         Content: content,
-        expires: Math.floor(expireTime.getTime() / 1000)
+        DateCreated: new Date().toString(),
+        Expires: Math.floor(expireTime.getTime() / 1000)
       }
     };
 
     console.log('Attempting to add Message', dynamoParams);
 
     dbPut(dynamoParams)
-    .then(data => {
+      .then(data => {
         console.log('Add item succeeded', data);
         this.emit(':tell', `Message added!`);
       })
@@ -184,8 +186,8 @@ const handlers = {
     // prompt for the recipe name if needed and then require a confirmation
     if (!slots.MessageTo.value) {
       const slotToElicit = 'MessageTo';
-      const speechOutput = 'Would you like to delete your messages?';
-      const repromptSpeech = 'Would you like to clear all messages?';
+      const speechOutput = 'Who\'s messages would you like to delete?';
+      const repromptSpeech = 'Who would you like to clear all messages for?';
       return this.emit(':elicitSlot', slotToElicit, speechOutput, repromptSpeech);
     }
     else if (slots.MessageTo.confirmationStatus !== 'CONFIRMED') {
@@ -210,43 +212,50 @@ const handlers = {
       TableName: MessagesTable
     };
 
-    const deleteParams = {
-      TableName: MessagesTable,
-      Key: {
-        UserId: userId,
-        MessageTo: slots.MessageTo.value
-      }
-    };
-
     console.log('Attempting to read data');
 
     dynamoParams.FilterExpression = 'UserId = :user_id AND MessageTo = :message_to';
     dynamoParams.ExpressionAttributeValues = { ':user_id': userId, ':message_to': slots.MessageTo.value };
 
-    deleteParams.ConditionExpression = dynamoParams.FilterExpression;
-    deleteParams.ExpressionAttributeValues = dynamoParams.ExpressionAttributeValues;
-
     // query DynamoDB
     dbScan(dynamoParams)
       .then(data => {
-        console.log('Read table succeeded!', data);
+        console.log("Read Successful!", data);         
 
-        var output = "";
+          if (data.Items && data.Items.length) {
+            var itemList = [];
+            data.Items.forEach(item => {
+              itemList.push({
+                "DeleteRequest": {
+                  Key: {
+                    "DateCreated": item.DateCreated,
+                    "UserId": item.UserId
+                  }
+                }
+              });
+            });
 
-        if (data.Items && data.Items.length) {
-          dbDelete(deleteParams).then(data => {
+            var output = "";
+
+            var deleteParams = {
+              "RequestItems": {
+                "Messages": itemList
+              }
+            };
+
+            dbBatchWrite(deleteParams).then(data => {
               output = "Successfully deleted all messages!";
               this.emit(':tell', output);
-          }).catch(err => {
+            }).catch(err => {
+              console.log(err);
               output = "An error occured while deleting all messages!  Please try again later.";
               this.emit(':tell', output);
-          });
-
-        }
-        else {
-          output = 'No Messages found!';
-          this.emit(':tell', output);
-        }
+            });
+          }
+          else {
+            output = 'No Messages found!';
+            this.emit(':tell', output);
+          }
       })
       .catch(err => {
         console.error(err);
